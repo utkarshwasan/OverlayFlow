@@ -151,7 +151,7 @@ Tests cover:
 ### Environment Variables
 ```env
 # Backend (.env)
-MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/livestream_app
+MONGODB_URI=""
 FLASK_ENV=development
 PORT=5001
 ```
