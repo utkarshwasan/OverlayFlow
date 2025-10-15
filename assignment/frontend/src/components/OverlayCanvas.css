@@ -1,0 +1,69 @@
+.overlay-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.overlay-canvas > * {
+  pointer-events: auto;
+}
+
+.overlay-text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.2;
+  user-select: none;
+  border-radius: 4px;
+  padding: 4px;
+  transition: all 0.2s ease;
+}
+
+.overlay-text:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.overlay-image {
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.overlay-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation for overlay appearance */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.overlay-canvas > * {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .overlay-text {
+    font-size: 18px !important;
+  }
+  
+  .overlay-canvas {
+    pointer-events: none;
+  }
+  
+  .overlay-canvas > * {
+    pointer-events: none;
+  }
+}
