@@ -1,170 +1,184 @@
-Livestreaming App - User Guide
+
+# 📺 Livestreaming App - User Guide
 
 This guide provides detailed instructions on how to set up the local development environment and use the features of the Livestreaming App.
 
-Table of Contents
+---
 
-Introduction
+## 📘 Table of Contents
+1. [Introduction](#1-introduction)
+2. [Local Development Setup (4-Terminal Guide)](#2-local-development-setup-4-terminal-guide)
+3. [Using the Application: A Step-by-Step Workflow](#3-using-the-application-a-step-by-step-workflow)
+4. [Managing Overlays](#4-managing-overlays)
+5. [Troubleshooting Common Issues](#5-troubleshooting-common-issues)
 
-Local Development Setup (4-Terminal Guide)
+---
 
-Using the Application: A Step-by-Step Workflow
+## 1. Introduction
 
-Managing Overlays
+### 🎯 What is the Livestreaming App?
 
-Troubleshooting Common Issues
+The **Livestreaming App** is a professional tool that allows you to stream **RTSP video feeds** with **custom text and image overlays**. It’s ideal for live events, branding, or any situation where you need to enhance your stream with dynamic visual information.
 
-1. Introduction
+### 💻 System Requirements
+- Modern web browser (Chrome or Edge recommended)
+- Python 3.8+
+- Node.js 16+
+- FFmpeg (must be placed in the backend folder as `ffmpeg.exe`)
+- MediaMTX (a local RTSP server)
 
-What is the Livestreaming App?
+---
 
-The Livestreaming App is a professional tool that allows you to stream RTSP video feeds with custom text and image overlays. It's perfect for live events or any situation where you need to add branding or information to your video stream.
+## 2. Local Development Setup (4-Terminal Guide)
 
-System Requirements
+This application requires a local setup with **four active processes**. Follow these steps carefully.
 
-Modern web browser (Chrome or Edge recommended)
-
-Python 3.8+
-
-Node.js 16+
-
-FFmpeg (must be placed in the backend folder as ffmpeg.exe)
-
-MediaMTX (a local RTSP server)
-
-2. Local Development Setup (4-Terminal Guide)
-
-This application requires a specific local environment consisting of four separate terminals running simultaneously. Please follow these steps carefully.
-
-Terminal 1: Start the Media Server (MediaMTX)
-
-This server acts as the central hub or "meeting point" for your video streams.
-
-Open your first terminal.
-
-Navigate to the folder where you extracted MediaMTX.
-
-Run the server:
-
+### 🛰️ Media Server (MediaMTX)
+```bash
 cd C:\mediamtx
 .\mediamtx.exe
+````
 
-✅ Success Check: The terminal will show logs indicating that the server is running and listening on port 8554 (RTSP).
+✅ **Success Check:** Logs indicate the server is listening on **port 8554 (RTSP)**.
 
-Terminal 2: Publish Your Video Source
+---
 
-This terminal acts as your "camera." It takes a local video file and continuously streams it to the MediaMTX server.
+### 🎥 Publish Your Video Source
 
-Open a second, separate terminal.
-
-Navigate to the project's backend directory.
-
-Run the following command, making sure to replace "yourVideo.mp4" with the name of your video file:
-
+```bash
+cd path/to/project/backend
 .\ffmpeg.exe -re -stream_loop -1 -i "yourVideo.mp4" -c copy -f rtsp -rtsp_transport tcp rtsp://localhost:8554/mystream
+```
 
-✅ Success Check: This terminal must remain open and should be actively printing continuous timecode updates (e.g., frame=... time=...). If this process stops, your video source is offline.
+✅ **Success Check:** Continuous frame updates (e.g., `frame=... time=...`) mean your video source is live.
 
-Terminal 3: Start the Flask Backend
+---
 
-This terminal runs the application's brain—the API that handles transcoding and database operations.
+### ⚙️ Start the Flask Backend
 
-Open a third, separate terminal.
-
-Navigate to the backend directory.
-
-Set up the environment and run the app:
-
+```bash
+cd backend
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
+```
 
-✅ Success Check: The terminal will show logs indicating the server is running on http://localhost:5001.
+✅ **Success Check:** The backend is running at **[http://localhost:5001](http://localhost:5001)**.
 
-Terminal 4: Start the React Frontend
+---
 
-This terminal runs the user interface that you interact with in the browser.
+### 🖥️ Start the React Frontend
 
-Open a fourth, separate terminal.
-
-Navigate to the frontend directory.
-
-Install dependencies and start the dev server:
-
+```bash
+cd frontend
 npm install
 npm run dev
+```
 
-✅ Success Check: The terminal will give you a local URL, typically http://localhost:3000.
+✅ **Success Check:** Frontend runs at **[http://localhost:3000](http://localhost:3000)**.
 
-3. Using the Application: A Step-by-Step Workflow
+---
 
-With all four terminals running, your application is ready to use.
+## 3. Using the Application: A Step-by-Step Workflow
 
-Step 1: Start the Stream on the Landing Page
+With all four terminals running, your environment is ready.
 
-Open your browser and navigate to http://localhost:3000.
+### Step 1: Start the Stream on the Landing Page
 
-You will see the landing page with an input field for the RTSP URL.
+1. Open your browser and go to **[http://localhost:3000](http://localhost:3000)**
+2. Enter your local stream URL:
 
-Enter your local stream URL: rtsp://localhost:8554/mystream
+   ```
+   rtsp://localhost:8554/mystream
+   ```
+3. Click **Start Stream**.
 
-Click the "Start Stream" button.
+> ⚠️ **Important:**
+> If the stream shows a red overlay or fails to load, remove the URL from the input field and click **Start Stream** again. This resets the stream.
 
-#IMPORTANT# - If the stream does not start properly and you see an red overlay afer pressing start then remove the url from input and the stram will start again.
+✅ After a few seconds, your video will appear in the preview player.
 
-After a few moments, your video stream will appear in the preview player.
+---
 
-Step 2: Access the Overlay Studio
+### Step 2: Access the Overlay Studio
 
-Once the stream is active, a new section will appear on the landing page.
+1. Once the stream is live, click **Continue to App**.
+2. You’ll be redirected to `/app`, which displays:
 
-Click the "Continue to App" button.
+   * A live video player
+   * An **Overlay Controls Panel** on the right
 
-This will take you to the main application page (/app), where you will see the video player on one side and the Overlay Controls Panel on the other.
+---
 
-4. Managing Overlays
+## 4. Managing Overlays
 
-The Controls Panel has three tabs: "Add Overlay," "Saved Overlays," and "Current."
+The **Controls Panel** contains three tabs:
 
-Adding a New Overlay
+* 🟢 **Add Overlay**
+* 💾 **Saved Overlays**
+* 🧱 **Current**
 
-On the "Add Overlay" tab, fill in the form with details for your text or image overlay (name, content, position, size, etc.).
+### ➕ Adding a New Overlay
 
-Click the "Add Overlay" button at the bottom of the form.
+1. Open the **Add Overlay** tab.
+2. Fill in the form fields (name, content, type, size, and position).
+3. Click **Add Overlay**.
 
-Your overlay will immediately appear on the video stream.
+Your overlay appears instantly on the video.
 
-Important: This overlay is temporary. To use it again later, you must save it.
+> 🔹 Note: Overlays added this way are temporary unless saved.
 
-Saving and Loading Overlays
+---
 
-To Save: After adding an overlay, click the "Save Current" button. This will save the configuration of the most recently added overlay to your database.
+### 💾 Saving and Loading Overlays
 
-To Load: Go to the "Saved Overlays" tab. Here you will see a list of all your saved configurations. Click the "Load" button on any item to add it to your current stream.
+**To Save:**
 
-Managing Overlays
+* After adding an overlay, click **Save Current** to store it in the database.
 
-Current Tab: This tab shows a list of all overlays currently active on the stream. You can click "Remove" to take one off the screen.
+**To Load:**
 
-Saved Overlays Tab: In this tab, you can click "Delete" to permanently remove a saved overlay configuration from your database.
+* Open the **Saved Overlays** tab.
+* Choose any saved configuration and click **Load** to bring it back onto the stream.
 
-5. Troubleshooting Common Issues
+---
 
-"Failed to start FFmpeg. Check RTSP URL or backend logs."
+### 🧱 Managing Overlays
 
-Meaning: The backend (app.py) could not find a video stream at the URL you provided.
+**Current Tab:**
 
-Solution: This almost always means Terminal 2 (the Video Source) is not running. Check that terminal to ensure it is open and actively printing frame counters.
+* Displays all active overlays.
+* Click **Remove** to delete one from the stream.
 
-The video plays for a second and then freezes.
+**Saved Overlays Tab:**
 
-Meaning: The backend transcoding process (ffmpeg) is unstable.
+* Lists all saved overlays.
+* Click **Delete** to permanently remove a configuration from the database.
 
-Solution: Ensure you are using the final, robust version of app.py that re-encodes the stream for stability.
+---
 
-bufferAppendError for 'audio' appears in the browser console.
+## 5. Troubleshooting Common Issues
 
-Meaning: The audio from your source video file is in a format that the browser cannot play correctly after transcoding.
+### ❌ “Failed to start FFmpeg. Check RTSP URL or backend logs.”
 
-Solution: This has been fixed in the final version of app.py, which forces the audio into a highly compatible AAC format. If you see this error, ensure you are running the latest version of the code.
+**Meaning:** Backend couldn’t find a valid video stream.
+**Fix:** Ensure the video source (Terminal 2) is running and actively printing frame counters.
+
+---
+
+### 🧊 Video plays briefly then freezes
+
+**Meaning:** Backend transcoding is unstable.
+**Fix:** Use the latest `app.py` version that includes re-encoding logic for FFmpeg stability.
+
+---
+
+### 🔊 `bufferAppendError for 'audio'` in the browser console
+
+**Meaning:** Audio codec is incompatible with the browser.
+**Fix:** Update to the latest backend version that forces **AAC audio encoding** for universal playback.
+
+
+✅ **All Set!**
+You now have a fully operational livestreaming app with a real-time overlay editor and stable HLS transcoding pipeline.
